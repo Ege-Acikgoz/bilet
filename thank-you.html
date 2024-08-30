@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teşekkürler</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('background.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .header {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .details {
+            margin-bottom: 20px;
+        }
+
+        .details p {
+            margin: 10px 0;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            TEŞEKKÜRLER
+        </header>
+
+        <div class="details">
+            <h2>Satın Alma Bilgileriniz</h2>
+            <p><strong>Ad Soyad:</strong> <span id="fullName"></span></p>
+            <p><strong>Blok:</strong> <span id="blockName"></span></p>
+            <p><strong>Kategori:</strong> <span id="categoryName"></span></p>
+            <p><strong>Fiyat:</strong> ₺<span id="price"></span></p>
+            <p><strong>Satın Alınan Bilet Sayısı:</strong> <span id="quantity"></span></p>
+        </div>
+
+        <div class="details">
+            <h2>Kalan Biletler</h2>
+            <p><strong>Kalan Bilet:</strong> <span id="ticketsLeft"></span></p>
+        </div>
+
+        <div class="details">
+            <h2>Şu Ana Kadar Kimler Satın Aldı?</h2>
+            <ul id="buyersList">
+                <!-- Satın alanların isimlerinin baş harfleri ve aldıkları bloklar buraya eklenecek -->
+            </ul>
+        </div>
+
+        <a href="index.html" class="button" onclick="updateHomepageTicketCount()">Ana Sayfaya Dön</a>
+    </div>
+
+    <script>
+        // Satın alma bilgilerinin alınması
+        const urlParams = new URLSearchParams(window.location.search);
+        const fullName = urlParams.get('fullName');
+        const blockName = urlParams.get('block');
+        const categoryName = urlParams.get('category');
+        const price = urlParams.get('price');
+        const quantity = urlParams.get('quantity');
+        const ticketsLeft = urlParams.get('ticketsLeft');
+
+        document.getElementById('fullName').textContent = fullName;
+        document.getElementById('blockName').textContent = blockName;
+        document.getElementById('categoryName').textContent = categoryName;
+        document.getElementById('price').textContent = price;
+        document.getElementById('quantity').textContent = quantity;
+        document.getElementById('ticketsLeft').textContent = ticketsLeft;
+
+        // Satın alanların listesini almak ve eklemek için API çağrısı
+        fetch('/api/buyers-list')
+            .then(response => response.json())
+            .then(data => {
+                const buyersListElement = document.getElementById('buyersList');
+                data.buyers.forEach(buyer => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${buyer.name} - Blok: ${buyer.block}`;
+                    buyersListElement.appendChild(listItem);
+                });
+            })
+            .catch(error => {
+                console.error('Hata:', error);
+            });
+
+        // Ana sayfadaki kalan bilet sayısını güncelle
+        function updateHomepageTicketCount() {
+            fetch('/api/update-ticket-count', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    block: blockName,
+                    category: categoryName,
+                    ticketsLeft: ticketsLeft - quantity
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log('Ana sayfa bilet sayısı güncellendi.');
+                    } else {
+                        console.error('Ana sayfa bilet sayısı güncellenemedi.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Hata:', error);
+                });
+        }
+    </script>
+</body>
+
+</html>

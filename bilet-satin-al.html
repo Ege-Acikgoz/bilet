@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bilet Satın Al</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #eee;
+            font-weight: bold;
+        }
+
+        .stadium-image {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            align-self: center;
+        }
+
+        .match-info {
+            padding: 15px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .categories-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .category {
+            background-color: white;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            flex: 1 1 20%;
+            /* Kategorilerin yan yana yerleşmesi için */
+            box-sizing: border-box;
+        }
+
+        .category h3 {
+            margin: 10px 0;
+        }
+
+        .category:hover {
+            background-color: #f0f0f0;
+        }
+
+        .category.inactive {
+            background-color: #d3d3d3;
+            /* Soluk renk */
+            cursor: not-allowed;
+        }
+
+        .category .ticket-count {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: #28a745;
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        .block-list {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .category.active .block-list {
+            display: block;
+        }
+
+        .block {
+            padding: 5px;
+            margin: 5px 0;
+            border-radius: 5px;
+            background-color: #d9d9d9;
+            position: relative;
+        }
+
+        .block.available {
+            background-color: #d9d9d9;
+        }
+
+        .block.full {
+            background-color: #ffdddd;
+            /* Kırmızı renk */
+            text-decoration: line-through;
+        }
+
+        .block .selection {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .block .buy-btn {
+            margin-top: 5px;
+            padding: 5px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .block .buy-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            Fenerbahçe S.K. – Real Madrid Bilet Satın Al
+        </header>
+
+        <img src="images/stadyum-plan.jpg" alt="Stadyum Yerleşimi" class="stadium-image">
+
+        <div class="match-info">
+            <h2>Fenerbahçe S.K. – Real Madrid</h2>
+            <p>Ülker Stadyumu Fenerbahçe Şükrü Saracoğlu Spor Kompleksi</p>
+            <p>30 Ağustos 2024 - 21:00</p>
+        </div>
+
+        <div class="categories-container">
+            <!-- Toplam 13 kategori -->
+            <div class="category inactive">
+                <h3>Fenerium Alt E</h3>
+                <p>Fiyat: ₺14.500</p>
+            </div>
+            <div class="category inactive">
+                <h3>Maraton Alt E</h3>
+                <p>Fiyat: ₺14.500</p>
+            </div>
+            <div class="category" onclick="toggleBlocks(this)">
+                <h3>Fenerium Alt / Maraton Alt D-F</h3>
+                <p>Fiyat: ₺4.750</p>
+                <span class="ticket-count">6 Bilet</span>
+                <div class="block-list">
+                    <div class="block available">
+                        Fenerium Alt D Blok
+                        <span class="selection"></span>
+                        <button class="buy-btn"
+                            onclick="buyTicket('Fenerium Alt D Blok', 'Fenerium Alt / Maraton Alt D-F', 4750, 6)">Satın
+                            Al</button>
+                    </div>
+                    <div class="block available">
+                        Fenerium Alt F Blok
+                        <span class="selection"></span>
+                        <button class="buy-btn"
+                            onclick="buyTicket('Fenerium Alt F Blok', 'Fenerium Alt / Maraton Alt D-F', 4750, 6)">Satın
+                            Al</button>
+                    </div>
+                    <div class="block full">
+                        Maraton Alt F Blok
+                        <span class="selection"></span>
+                    </div>
+                    <div class="block available">
+                        Maraton Alt D Blok
+                        <span class="selection"></span>
+                        <button class="buy-btn"
+                            onclick="buyTicket('Maraton Alt D Blok', 'Fenerium Alt / Maraton Alt D-F', 4750, 6)">Satın
+                            Al</button>
+                    </div>
+                </div>
+            </div>
+            <div class="category" onclick="toggleBlocks(this)">
+                <h3>Fenerium Alt / Maraton Alt C-G</h3>
+                <p>Fiyat: ₺4.100</p>
+                <span class="ticket-count">9 Bilet</span>
+                <div class="block-list">
+                    <div class="block available">
+                        Fenerium Alt C Blok
+                        <span class="selection"></span>
+                        <button class="buy-btn"
+                            onclick="buyTicket('Fenerium Alt C Blok', 'Fenerium Alt / Maraton Alt C-G', 4100, 9)">Satın
+                            Al</button>
+                    </div>
+                    <div class="block full">
+                        Fenerium Alt G Blok
+                        <span class="selection"></span>
+                    </div>
+                    <div class="block available">
+                        Maraton Alt C Blok
+                        <span class="selection"></span>
+                        <button class="buy-btn"
+                            onclick="buyTicket('Maraton Alt C Blok', 'Fenerium Alt / Maraton Alt C-G', 4100, 9)">Satın
+                            Al</button>
+                    </div>
+                    <div class="block available">
+                        Maraton Alt G Blok
+                        <span class="selection"></span>
+                        <button class="buy-btn"
+                            onclick="buyTicket('Maraton Alt G Blok', 'Fenerium Alt / Maraton Alt C-G', 4100, 9)">Satın
+                            Al</button>
+                    </div>
+                </div>
+            </div>
+            <div class="category" onclick="toggleBlocks(this)">
+                <h3>Fenerium Alt / Maraton Alt B-H</h3>
+                <p>Fiyat: ₺3.400</p>
+                <span class="ticket-count">9 Bilet</span>
+                <div class="block-list">
+                    <div class="block full">
+                        Fenerium Alt B Blok
+                        <span class="selection"></span>
+                    </div>
+                    <div class="block full">
+                        Fenerium Alt H Blok
+                        <span class="selection"></span>
+                    </div>
+                    <div class="block available">
+                        Maraton Alt B Blok
+                        <span class="selection"></span>
+                        <button class="buy-btn"
+                            onclick="buyTicket('Maraton Alt B Blok', 'Fenerium Alt / Maraton Alt B-H', 3400, 9)">Satın
+                            Al</button>
+                    </div>
+                    <div class="block available">
+                        Maraton Alt H Blok
+                        <span class="selection"></span>
+                        <button class="buy-btn"
+                            onclick="buyTicket('Maraton Alt H Blok', 'Fenerium Alt / Maraton Alt B-H', 3400, 9)">Satın
+                            Al</button>
+                    </div>
+                </div>
+            </div>
+            <div class="category" onclick="toggleBlocks(this)">
+                <h3>Fenerium Alt / Maraton Alt A-I</h3>
+                <p>Fiyat: ₺3.000</p>
+                <span class="ticket-count">13 Bilet</span>
+                <div class="block-list">
+                    <div class="block available">
+                        Fenerium Alt A Blok
+                        <span class="selection"></span>
+                        <button class="buy-btn"
+                            onclick="buyTicket('Fenerium Alt A Blok', 'Fenerium Alt / Maraton Alt A-I', 3000, 13)">Satın
+                            Al</button>
+                    </div>
+                    <div class="block available">
+                        Fenerium Alt I Blok
+                        <span class="selection"></span>
+                        <button class="buy-btn"
+                            onclick="buyTicket('Fenerium Alt I Blok', 'Fenerium Alt / Maraton Alt A-I', 3000, 13)">Satın
+                            Al</button>
+                    </div>
+                    <div class="block available">
+                        Maraton Alt A Blok
+                        <span class="selection"></span>
+                        <button class="buy-btn"
+                            onclick="buyTicket('Maraton Alt A Blok', 'Fenerium Alt / Maraton Alt A-I', 3000, 13)">Satın
+                            Al</button>
+                    </div>
+                    <div class="block available">
+                        Maraton Alt I Blok
+                        <span class="selection"></span>
+                        <button class="buy-btn"
+                            onclick="buyTicket('Maraton Alt I Blok', 'Fenerium Alt / Maraton Alt A-I', 3000, 13)">Satın
+                            Al</button>
+                    </div>
+                </div>
+            </div>
+            <div class="category inactive">
+                <h3>Fenerium Üst / Maraton Üst E </h3>
+                <p>Fiyat: ₺2.200</p>
+                <!-- Blokları burada listelemiyoruz -->
+            </div>
+            <div class="category" onclick="toggleBlocks(this)">
+                <h3>Fenerium Üst / Maraton Üst D-F </h3>
+                <p>Fiyat: ₺2.000</p>
+                <span class="ticket-count">19 Bilet</span>
+                <div class="block-list">
+                    <div class="block available">
+                        Fenerium Üst D Blok
+                        <span class="selection"></span>
+                        <button class="buy-btn"
+                            onclick="buyTicket('Fenerium Üst D Blok', 'Fenerium Üst / Maraton Üst D-F', 2000, 19)">Satın
+                            Al</button>
+                    </div>
+                    <div class="block available">
+                        Fenerium Üst F Blok
+                        <span class="selection"></span>
+                        <button class="buy-btn"
+                            onclick="buyTicket('Fenerium Üst F Blok', 'Fenerium Üst / Maraton Üst D-F', 2000, 19)">Satın
+                            Al</button>
+                    </div>
+                    <div class="block full">
+                        Maraton Üst D Blok
+                        <span class="selection">-</span>
+                    </div>
+                    <div class="block available">
+                        Maraton Üst F Blok
+                        <span class="selection">-</span>
+                        <button class="buy-btn"
+                            onclick="buyTicket('Maraton Üst F Blok', 'Fenerium Üst / Maraton Üst D-F', 2000, 19)">Satın
+                            Al</button>
+                    </div>
+                </div>
+            </div>
+            <div class="category" onclick="toggleBlocks(this)">
+                <h3>Fenerium Üst / Maraton Üst C-G </h3>
+                <p>Fiyat: ₺1.350</p>
+                <span class="ticket-count">5 Bilet</span>
+                <div class="block-list">
+                    <div class="block available">
+                        Fenerium Üst C Blok
+                        <span class="selection"></span>
+                        <button class="buy-btn"
+                            onclick="buyTicket('Fenerium Üst C Blok', 'Fenerium Üst / Maraton Üst C-G', 1350, 5)">Satın
+                            Al</button>
+                    </div>
+                    <div class="block available">
+                        Fenerium Üst G Blok
+                        <span class="selection"></span>
+                        <button class="buy-btn"
+                            onclick="buyTicket('Fenerium Üst G Blok', 'Fenerium Üst / Maraton Üst C-G', 1350, 5)">Satın
+                            Al</button>
+                    </div>
+                    <div class="block available">
+                        Maraton Üst C Blok
+                        <span class="selection"></span>
+                        <button class="buy-btn"
+                            onclick="buyTicket('Maraton Üst C Blok', 'Fenerium Üst / Maraton Üst C-G', 1350, 5)">Satın
+                            Al</button>
+                    </div>
+                    <div class="block full">
+                        Maraton Üst G Blok
+                        <span class="selection"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="category" onclick="toggleBlocks(this)">
+                <h3>Fenerium Üst / Maraton Üst B-H </h3>
+                <p>Fiyat: ₺1.050</p>
+                <span class="ticket-count">11 Bilet</span>
+                <div class="block-list">
+                    <div class="block available">
+                        Fenerium Üst B Blok
+                        <span class="selection"></span>
+                        <button class="buy-btn"
+                            onclick="buyTicket('Fenerium Üst B Blok', 'Fenerium Üst / Maraton Üst B-H', 1050, 11)">Satın
+                            Al</button>
+                    </div>
+                    <div class="block available">
+                        Fenerium Üst H Blok
+                        <span class="selection"></span>
+                        <button class="buy-btn"
+                            onclick="buyTicket('Fenerium Üst H Blok', 'Fenerium Üst / Maraton Üst B-H', 1050, 11)">Satın
+                            Al</button>
+                    </div>
+                    <div class="block full">
+                        Maraton Üst B Blok
+                        <span class="selection"></span>
+                    </div>
+                    <div class="block available">
+                        Maraton Üst H Blok
+                        <span class="selection"></span>
+                        <button class="buy-btn"
+                            onclick="buyTicket('Maraton Üst H Blok', 'Fenerium Üst / Maraton Üst B-H', 1050, 11)">Satın
+                            Al</button>
+                    </div>
+                </div>
+            </div>
+            <div class="category" onclick="toggleBlocks(this)">
+                <h3>Fenerium Üst / Maraton Üst A-I</h3>
+                <p>Fiyat: ₺800</p>
+                <span class="ticket-count">10 Bilet</span>
+                <div class="block-list">
+                    <div class="block full">
+                        Fenerium Üst A Blok
+                        <span class="selection"></span>
+                    </div>
+                    <div class="block full">
+                        Fenerium Üst I Blok
+                        <span class="selection"></span>
+                    </div>
+                    <div class="block available">
+                        Maraton Üst A Blok
+                        <span class="selection"></span>
+                        <button class="buy-btn"
+                            onclick="buyTicket('Maraton Üst A Blok', 'Fenerium Üst / Maraton Üst A-I', 800, 10)">Satın
+                            Al</button>
+                    </div>
+                    <div class="block available">
+                        Maraton Üst I Blok
+                        <span class="selection"></span>
+                        <button class="buy-btn"
+                            onclick="buyTicket('Maraton Üst I Blok', 'Fenerium Üst / Maraton Üst A-I', 800, 10)">Satın
+                            Al</button>
+                    </div>
+                </div>
+            </div>
+            <div class="category" onclick="toggleBlocks(this)">
+                <h3>Kuzey / Spor Toto </h3>
+                <p>Fiyat: ₺400</p>
+                <span class="ticket-count">23 Bilet</span>
+                <div class="block-list">
+                    <div class="block available">
+                        Kuzey Tribünü
+                        <span class="selection"></span>
+                        <button class="buy-btn" onclick="buyTicket('Kuzey Tribünü', 'Kuzey / Spor Toto', 400, 23)">Satın
+                            Al</button>
+                    </div>
+                    <div class="block available">
+                        Spor Toto Tribünü
+                        <span class="selection"></span>
+                        <button class="buy-btn"
+                            onclick="buyTicket('Spor Toto Tribünü', 'Kuzey / Spor Toto', 400, 23)">Satın
+                            Al</button>
+                    </div>
+                </div>
+            </div>
+            <div class="category" onclick="toggleBlocks(this)">
+                <h3>Misafir Tribünü</h3>
+                <p>Fiyat: ₺2.200</p>
+                <span class="ticket-count">20 Bilet</span>
+                <div class="block-list">
+                    <div class="block available">
+                        Misafir Tribünü
+                        <span class="selection"></span>
+                        <button class="buy-btn"
+                            onclick="buyTicket('Misafir Tribünü', 'Misafir Tribünü', 2200, 20)">Satın
+                            Al</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleBlocks(category) {
+            category.classList.toggle('active');
+        }
+
+        function buyTicket(blockName, category, price, ticketsLeft) {
+            // Kullanıcıyı checkout sayfasına yönlendir
+            window.location.href = `checkout.html?block=${encodeURIComponent(blockName)}&category=${encodeURIComponent(category)}&price=${encodeURIComponent(price)}&ticketsLeft=${encodeURIComponent(ticketsLeft)}`;
+        }
+    </script>
+</body>
+
+</html>

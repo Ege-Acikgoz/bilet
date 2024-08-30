@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anasayfa</title>
+    <style>
+        /* CSS Kodu */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #a99090;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+            background-color: #eee;
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+
+        .event-section {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .event-section img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+
+        .event-section .event-info {
+            margin-top: 10px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #aa110c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .button:hover {
+            background-color: #ff0000;
+        }
+
+        .ticket-count {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .button.disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Etkinlikler</h1>
+        </header>
+
+        <section class="event-section">
+            <h2>Fenerbahçe S.K. – Real Madrid</h2>
+            <img src="images/fener-real.png" alt="Fenerbahçe S.K. – Real Madrid">
+            <div class="event-info">
+                <p>Trendyol Süper Lig 4. Hafta Karşılaşması</p>
+                <p>Ülker Stadyumu Fenerbahçe Şükrü Saracoğlu Spor Kompleksi</p>
+                <p>30 Ağustos 2024, 21:00</p>
+            </div>
+            <a href="bilet-satin-al.html" id="purchaseButton" class="button">Bilet Al</a>
+            <div class="ticket-count">Kalan Bilet: <span id="remaining-tickets">125</span></div>
+        </section>
+    </div>
+
+
+</body>
+
+</html>
